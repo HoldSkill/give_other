@@ -124,7 +124,6 @@ def send_msg():
     # img or text
     type = request.args.get('type', '')
     delay_time = request.args.get('delay_time', 0)
-    print(text)
     # find wxid by uin
     v_user_pickle = weixin_bot.red.get('v_user_' + wx_id)
     v_user = pickle.loads(v_user_pickle)
