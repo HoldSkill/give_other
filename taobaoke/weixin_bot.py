@@ -624,7 +624,7 @@ class WXBot(object):
         # 起始位置
         start_pos = 0
         # 数据分块长度
-        data_len = 65535
+        data_len = 35535
         # 总长度
         data_total_length = len(data)
         print('preparing sent img length length {}'.format(data_total_length))
