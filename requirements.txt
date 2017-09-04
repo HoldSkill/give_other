@@ -1,0 +1,10 @@
+Flask==0.12
+Flask_SQLAlchemy==2.2
+grpcio==1.4.0
+oss2==2.2.0
+requests==2.11.1
+gevent==1.2.1
+tornado==3.2.1
+protobuf==3.3.0
+grpc==0.3-19
+redis==2.10.5
