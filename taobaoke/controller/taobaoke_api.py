@@ -108,32 +108,32 @@ def get_qrcode():
     import thread
     thread.start_new_thread(wx_bot.check_and_confirm_and_load, (qrcode_rsp, deviceId))
 
-    return jsonify({"qrcode_url": oss_path, "uuid":uuid})
+    return jsonify({"qrcode_url": oss_path, "uuid": uuid})
 
 
 @app.route('/send_msg', methods=['GET'])
 @support_jsonp
-def send_text_msg_type():
+def send_msg():
     """
     发送消息接口 传入wx_id 群id 内容，异步操作。只返回接收成功，不保证操作成功
     :return: 
     """
-    uin = request.args.get('uin', '')
-    group_id = request.args.get('group_id', '')
+    wx_id = request.args.get('wx_id', '')
+    to_wx_id = request.args.get('to_wx_id', '')
     text = request.args.get('text', '')
     # img or text
     type = request.args.get('type', '')
     delay_time = request.args.get('delay_time', 0)
     print(text)
     # find wxid by uin
-    v_user_pickle = weixin_bot.red.get('v_user_' + uin)
+    v_user_pickle = weixin_bot.red.get('v_user_' + wx_id)
     v_user = pickle.loads(v_user_pickle)
 
     wx_bot = WXBot()
     return_msg = "1"
     if type == 'img':
         import thread
-        thread.start_new_thread(wx_bot.send_img_msg, (group_id, v_user, text))
+        thread.start_new_thread(wx_bot.send_img_msg, (to_wx_id, v_user, text))
     elif type == 'text':
         # 请求grpc 必须替换这些字符
         if '\n' in text or '\r' in text:
@@ -141,9 +141,9 @@ def send_text_msg_type():
             # 类似发单群
             text = text.replace('\r', '\\r').replace('\n', '\\r')
             import thread
-            thread.start_new_thread(wx_bot.try_sleep_send, (int(delay_time), group_id, text, v_user))
+            thread.start_new_thread(wx_bot.try_sleep_send, (int(delay_time), to_wx_id, text, v_user))
         else:
-            wx_bot.send_text_msg(group_id, text, v_user)
+            wx_bot.send_text_msg(to_wx_id, text, v_user)
     else:
         return_msg = 'type error, should be img or text'
     return jsonify({"ret": return_msg})
